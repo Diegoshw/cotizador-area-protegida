@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cotizador de Área Protegida</title>
+    <style>
+        body {
+            font-family: Helvetica, Arial, sans-serif;
+            background-color: #f0f4f8;
+            color: #1c3d5a;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            width: 400px;
+            text-align: center;
+        }
+        h2 {
+            text-align: center;
+        }
+        label {
+            display: block;
+            margin-top: 10px;
+            font-weight: bold;
+        }
+        select, input {
+            width: 100%;
+            padding: 8px;
+            margin-top: 5px;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+            font-size: 16px;
+        }
+        button {
+            width: 100%;
+            padding: 10px;
+            margin-top: 15px;
+            background-color: #007aff;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #005bb5;
+        }
+        #resultadoPrecio, #resultado {
+            margin-top: 10px;
+            font-size: 22px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container" id="pantalla1">
+        <h2>Cotizador de Área Protegida</h2>
+        <label for="servicios">Cantidad de servicios mensuales</label>
+        <select id="servicios" onchange="actualizarPrecio()">
+            <option value="desconocido">Desconocido</option>
+            <script>
+                for (let i = 1; i <= 30; i++) {
+                    document.write(`<option value="${i}">${i}</option>`);
+                }
+            </script>
+        </select>
+        <div id="resultadoPrecio"></div>
+        <button onclick="continuar()">Continuar</button>
+    </div>
+
+    <div class="container" id="pantalla2" style="display: none;">
+        <h2>Completar información</h2>
+        <label for="metros">Metros cuadrados</label>
+        <select id="metros">
+            <option value="0.5">Menos de 100</option>
+            <option value="1">100 - 200</option>
+            <option value="1.5">200 - 500</option>
+            <option value="2">500 - 1000</option>
+            <option value="2.5">1000 - 2000</option>
+            <option value="3">2000 - 3000</option>
+            <option value="3.5">3000 - 4000</option>
+            <option value="4">Más de 4000</option>
+        </select>
+
+        <label for="empleados">Cantidad de empleados</label>
+        <select id="empleados">
+            <option value="0.5">Menos de 5</option>
+            <option value="1">5 - 15</option>
+            <option value="1.5">15 - 50</option>
+            <option value="2">50 - 100</option>
+            <option value="2.5">100 - 200</option>
+            <option value="3">200 - 300</option>
+            <option value="3.5">300 - 400</option>
+            <option value="4">400 - 500</option>
+            <option value="5">Más de 500</option>
+        </select>
+
+        <label for="rubro">Rubro</label>
+        <select id="rubro">
+            <option value="0.2">Oficina</option>
+            <option value="0.4">Comercio minorista</option>
+            <option value="0.5">Restaurante/Bar</option>
+            <option value="1">Fábrica/Industria</option>
+            <option value="2">Gimnasios</option>
+            <option value="2">Salón de fiesta</option>
+            <option value="3">Colegio/Club deportivo</option>
+        </select>
+        <button onclick="calcular()">Calcular</button>
+        <button onclick="volver()">Volver</button>
+        <div id="resultado"></div>
+    </div>
+    
+    <script>
+        const VALOR_CODIGO_ROJO = 140000;
+
+        function actualizarPrecio() {
+            const servicios = document.getElementById("servicios").value;
+            if (servicios !== "desconocido") {
+                const precio = parseInt(servicios) * VALOR_CODIGO_ROJO;
+                document.getElementById("resultadoPrecio").innerText = `Precio final: $${precio.toLocaleString("es-AR")}`;
+            } else {
+                document.getElementById("resultadoPrecio").innerText = "";
+            }
+        }
+
+        function continuar() {
+            const servicios = document.getElementById("servicios").value;
+            if (servicios === "desconocido") {
+                document.getElementById("pantalla1").style.display = "none";
+                document.getElementById("pantalla2").style.display = "block";
+            }
+        }
+
+        function volver() {
+            document.getElementById("pantalla2").style.display = "none";
+            document.getElementById("pantalla1").style.display = "block";
+        }
+
+        function calcular() {
+            const metros = parseFloat(document.getElementById("metros").value);
+            const empleados = parseFloat(document.getElementById("empleados").value);
+            const rubro = parseFloat(document.getElementById("rubro").value);
+            const mayorValor = Math.max(metros, empleados);
+            const precio = mayorValor * rubro * VALOR_CODIGO_ROJO;
+            document.getElementById("resultado").innerText = `Precio final: $${precio.toLocaleString("es-AR")}`;
+        }
+    </script>
+</body>
+</html>
